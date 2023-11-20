@@ -11,9 +11,6 @@ public class ConvertFrame extends JFrame {
 
     JFrame frame = new JFrame();
 
-    private final Color[] colorValue = {Color.GREEN};
-
-
     private JLabel label1;
 
     private JLabel lDollar, lPesos, lEuro;
@@ -58,13 +55,15 @@ public class ConvertFrame extends JFrame {
         fileMenu.setMnemonic('F');
 
         JMenuItem convertItem = new JMenuItem("Convert");
-        convertItem.setMnemonic('C');
+        convertItem.setMnemonic('n');
         JMenuItem clearItem = new JMenuItem("Clear");
-        clearItem.setMnemonic('E');
+        clearItem.setMnemonic('e');
         fileMenu.add(convertItem);
         fileMenu.add(clearItem);
-        MyEventHandler covertItemHandler = new MyEventHandler();
-        convertItem.addActionListener(covertItemHandler);
+        MyEventHandler convertItemHandler = new MyEventHandler();
+        convertItem.addActionListener(convertItemHandler);
+        clearItem.addActionListener(new clear());
+
 
         JMenuItem aboutItem = new JMenuItem("About");
         convertItem.setMnemonic('A');
@@ -80,8 +79,8 @@ public class ConvertFrame extends JFrame {
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                double result = JOptionPane.showConfirmDialog(frame,"You are going to close ?",
-                        "Exit Confirmation : ", JOptionPane.YES_NO_OPTION);
+                double result = JOptionPane.showConfirmDialog(frame,"Are you sure?",
+                        "Confirmation window ", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION)
                     System.exit(0);
                 else if (result == JOptionPane.NO_OPTION)
@@ -100,7 +99,7 @@ public class ConvertFrame extends JFrame {
         // create ButtonGroup for from JRadioButtons
         DollarFromJRadioButton = new JRadioButton("US Dollar", true);
         PesosFromJRadioButton = new JRadioButton("Mexican Peso", false);
-        EurosFromJRadioButton = new JRadioButton("Euros", false);
+        EurosFromJRadioButton = new JRadioButton("Euro", false);
         fromButtonGroup = new ButtonGroup();
         fromButtonGroup.add(DollarFromJRadioButton);
         fromButtonGroup.add(PesosFromJRadioButton);
@@ -108,7 +107,7 @@ public class ConvertFrame extends JFrame {
 
         DollarToJRadioButton = new JRadioButton("US Dollar", false);
         PesosToJRadioButton = new JRadioButton("Mexican Peso", true);
-        EurosToJRadioButton = new JRadioButton("Euros", false);
+        EurosToJRadioButton = new JRadioButton("Euro", false);
         toButtonGroup = new ButtonGroup();
         toButtonGroup.add(DollarToJRadioButton);
         toButtonGroup.add(PesosToJRadioButton);
@@ -175,14 +174,14 @@ public class ConvertFrame extends JFrame {
         toJPanel.add(EurosToJRadioButton);
 
         // create labels
-        label1 = new JLabel(" from:");
-        label2 = new JLabel("to:");
+        label1 = new JLabel("Convert from:");
+        label2 = new JLabel("Convert to:");
         label3 = new JLabel("Enter Currency: ");
         label4 = new JLabel("Comparable Currency is: ");
 
         // create JTextField for getting temperature to be converted
         currencyJTextField1 = new JTextField(10);
-        currencyJTextField1.setText("0");
+        currencyJTextField1.setText("0.0");
 
         // event handling using inner class (Style 1)
         MyEventHandler handler1 = new MyEventHandler();// create object
@@ -191,6 +190,7 @@ public class ConvertFrame extends JFrame {
         // JTextField to display temperature after conversion
         currencyJTextField2 = new JTextField(10);
         currencyJTextField2.setEditable(false);
+
 
         // add components to GUI
         setLayout(new GridLayout(11, 1));
@@ -214,7 +214,7 @@ public class ConvertFrame extends JFrame {
         this.getContentPane().add(panel);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        button.addActionListener(covertItemHandler);
+        button.addActionListener(convertItemHandler);
 
 
 
@@ -231,7 +231,7 @@ public class ConvertFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double result = JOptionPane.showConfirmDialog(frame,
-                        "Do you want to Exit ?", "Exit Confirmation : ",
+                        "Are you sure?", "Confirmation window ",
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION)
                     System.exit(0);
@@ -263,9 +263,9 @@ public class ConvertFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
-            JOptionPane.showMessageDialog(ConvertFrame.this," This app convert currency i"
+            JOptionPane.showMessageDialog(ConvertFrame.this," Currency Conversion Program "
                             + "\n using menus and buttons."
-                            +" \n Source: www.oanda.com/currency-converter/ (http://www.oanda.com/currency-converter/)",
+                            +" \n source: http://www.oanda.com/currency-converter/",
                     "About", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -277,7 +277,7 @@ public class ConvertFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
-            currencyJTextField1.setText("0");;
+            currencyJTextField1.setText("0.0");;
             currencyJTextField2.setText("");;
 
         }
@@ -309,37 +309,37 @@ public class ConvertFrame extends JFrame {
                 if (DollarFromJRadioButton.isSelected() && PesosToJRadioButton.isSelected()) {
                     convertCurrency = (double) (value * 18);
                     currencyJTextField2.setText(String.valueOf(convertCurrency));
-                    result = "Dollar to Pesos";
+                    result = "US Dollar to Mexican Peso";
                 }
                 // convert Dollar to Euros
                 else if (DollarFromJRadioButton.isSelected() && EurosToJRadioButton.isSelected()) {
-                    convertCurrency = (double) (value * 0.91);
+                    convertCurrency = (double) (value * 0.93);
                     currencyJTextField2.setText(String.valueOf(convertCurrency));
-                    result = "Dollar to Euros";
+                    result = "US Dollar to Euro";
                 }
                 // convert euro to dollar
                 else if (PesosFromJRadioButton.isSelected() && DollarToJRadioButton.isSelected()) {
                     convertCurrency = (double) (value/18);
                     currencyJTextField2.setText(String.valueOf(convertCurrency));
-                    result = "Pesos to Dollar";
+                    result = "Mexican Peso to US Dollar";
                 }
                 // convert pesos to euros
                 else if (PesosFromJRadioButton.isSelected() && EurosToJRadioButton.isSelected()) {
                     convertCurrency = (double) (value*0.05);
                     currencyJTextField2.setText(String.valueOf(convertCurrency));
-                    result = "Pesos to Euros";
+                    result = "Mexican Peso to Euro";
                 }
                 // convert Euros to dollar
                 else if (EurosFromJRadioButton.isSelected() && DollarToJRadioButton.isSelected()) {
-                    convertCurrency = (double) (value / 0.91);
+                    convertCurrency = (double) (value / 0.93);
                     currencyJTextField2.setText(String.valueOf(convertCurrency));
-                    result = "Euros to Dollar";
+                    result = "Euro to US Dollar";
                 }
                 //convert Euros to pesos
                 else if (EurosFromJRadioButton.isSelected() && PesosToJRadioButton.isSelected()) {
                     convertCurrency = (double) (value/0.05);
                     currencyJTextField2.setText(String.valueOf(convertCurrency));
-                    result = "Euros to Pesos";
+                    result = "Euro to Mexican Peso";
                 }
 
                 else {
@@ -347,7 +347,9 @@ public class ConvertFrame extends JFrame {
                     result = "No conversion selected";
                 }
 
-                result += "\n" + value + "  to \t\t  " + convertCurrency + "";
+                result += "\n" + value + " is equivalent to\t"+ convertCurrency + "";
+
+                currencyJTextField2.setBackground(Color.GREEN);
 
                 JOptionPane.showMessageDialog(ConvertFrame.this, result, "Converted Currency",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -356,3 +358,4 @@ public class ConvertFrame extends JFrame {
     }
 
 }
+
